@@ -1,0 +1,45 @@
+╔═══════════════════════════════════════════════════════════════════════════════════════╗
+║                         POWER INPUT & 3.3V LDO SCHEMATIC                              ║
+║                    ESP32 RS485 Isolated Design - Section 1                            ║
+╚═══════════════════════════════════════════════════════════════════════════════════════╝
+
+5V DC INPUT
+===========
+
+J1: DC Power Input (5.5×2.1mm barrel jack or 2-pin terminal)
+
+(+) ---[F1]---[D1]---+---[C1]---+---[C2]---+-------> +5V
+        PTC   Schottky  100µF     0.1µF
+        750mA 1N5819    16V       50V
+
+(-) --------+--------+--------+---------> GND
+
+F1: MF-MSMF075 (PTC Resettable Fuse, 750mA hold, 1.5A trip)
+D1: 1N5819 (Schottky diode, reverse polarity protection)
+C1: 100µF/16V Electrolytic (Bulk input capacitance)
+C2: 0.1µF/50V Ceramic X7R (High frequency filtering)
+
+
+3.3V LDO REGULATOR
+==================
+
+U1: AMS1117-3.3 (SOT-223)
+
++5V --[C3]--+-----| VIN    VOUT |--+--[C4]--+--[C5]--+--> +3.3V
+     10µF   |     |              |  |  22µF  | 0.1µF |
+           GND    | AMS1117-3.3  |  |  10V   |  50V  |
+                  |   GND/ADJ    | GND     GND     GND
+                  +------+-------+
+                         |
+                        GND
+
+C3: 10µF/10V Ceramic X5R (LDO input)
+C4: 22µF/10V Ceramic X5R (LDO output)
+C5: 0.1µF/50V Ceramic X7R (High frequency output)
+
+Power LED: +3.3V --[R1 1kΩ]--|>|-- GND (LED1 Green)
+
+SPECIFICATIONS:
+- Input: 5V DC (4.5V - 5.5V)
+- Output: +3.3V @ 800mA max
+- Protection: Reverse polarity, overcurrent
