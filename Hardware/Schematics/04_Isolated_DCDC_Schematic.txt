@@ -1,0 +1,18 @@
+ISOLATED DC-DC POWER SUPPLY SCHEMATIC for ESP32 RS485 Isolated Design Section 3.
+
+U5 B0505S-1WR2 Isolated DC-DC Converter SIP-4.
+Specifications:
+Input 5V DC 4.5V to 5.5V, Output 5V DC isolated 200mA, Isolation 1500V DC or 3000V DC enhanced, Efficiency 80 percent.
+
+Pinout:
+VIN+ pin 1, VIN- pin 2, VOUT- pin 3, VOUT+ pin 4.
+
+Components:
+C10 10uF 10V input filter,
+C12 10uF 10V output filter,
+C13 0.1uF 50V output HF filter.
+
+Alternatives:
+MORNSUN B0505S-1WR3 3kV,
+Murata NME0505SC 1kV,
+RECOM R05-05S05 1.5kV.
