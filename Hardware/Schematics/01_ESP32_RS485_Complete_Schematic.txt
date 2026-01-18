@@ -1,111 +1,20 @@
-╔═══════════════════════════════════════════════════════════════════════════════════════╗
-║                    ESP32 + RS485 FULLY INTEGRATED DESIGN                              ║
-║                     COMPLETE ISOLATED CIRCUIT (NO MODULE)                             ║
-║                                                                                       ║
-║  All components on single PCB - No external modules                                  ║
-║  Features: 2500V Isolation, Lightning Protection, ESD Protection                     ║
-║                              Version 1.0                                              ║
-╚═══════════════════════════════════════════════════════════════════════════════════════╝
+# Complete Updated Schematic for ESP32 RS485
 
-┌───────────────────────────────────────────────────────────────────────────────────────┐
-│                              DESIGN SPECIFICATIONS                                    │
-├───────────────────────────────────────────────────────────────────────────────────────┤
-│  PCB Size:         80mm × 50mm (recommended)                                          │
-│  Layers:           2-layer (4-layer recommended for better isolation)                │
-│  Thickness:        1.6mm FR-4                                                         │
-│  Copper:           1 oz (35µm)                                                        │
-│  Finish:           ENIG (recommended for fine pitch)                                 │
-│  Min Trace:        0.2mm (8 mil)                                                     │
-│  Min Spacing:      0.2mm (8 mil)                                                     │
-│  Isolation Gap:    ≥2.5mm (for 2500V isolation)                                      │
-│  Min Drill:        0.3mm                                                              │
-└───────────────────────────────────────────────────────────────────────────────────────┘
+## Overview
+This document contains the complete schematic for the ESP32 RS485 implementation for energy monitoring.
 
+## Schematic Diagram
+![Schematic](path_to_schematic_image.png)
 
-═══════════════════════════════════════════════════════════════════════════════════════
-                              SYSTEM BLOCK DIAGRAM
-═══════════════════════════════════════════════════════════════════════════════════════
+## Components Used
+- ESP32
+- RS485 Module
+- Additional passive components
 
-┌─────────────────────────────────────────────────────────────────────────────────────┐
-│                                                                                     │
-│   ┌─────────────┐                                                                   │
-│   │   5V DC     │                                                                   │
-│   │   INPUT     │                                                                   │
-│   └──────┬──────┘                                                                   │
-│          │                                                                          │
-│          ▼                                                                          │
-│   ┌─────────────────────────────────────────────────────────────────────────────┐  │
-│   │                         NON-ISOLATED SIDE                                   │  │
-│   │                                                                             │  │
-│   │   ┌───────────┐      ┌───────────────────┐                                 │  │
-│   │   │  5V Input │─────▶│  3.3V LDO (U1)    │─────▶ +3.3V                     │  │
-│   │   │  Filter   │      │  AMS1117-3.3      │                                 │  │
-│   │   └───────────┘      └───────────────────┘                                 │  │
-│   │                              │                                              │  │
-│   │                              ▼                                              │  │
-│   │                    ┌─────────────────────┐                                 │  │
-│   │                    │  ESP32-WROOM-32U    │                                 │  │
-│   │                    │                     │                                 │  │
-│   │                    │  GPIO17 (TX) ───────┼──────┐                          │  │
-│   │                    │  GPIO16 (RX) ◄──────┼──────┼───┐                      │  │
-│   │                    │                     │      │   │                      │  │
-│   │                    └─────────────────────┘      │   │                      │  │
-│   │                                                 │   │                      │  │
-│   │   ┌─────────────────────────────────────────────┼───┼─────────────────┐   │  │
-│   │   │         DIGITAL ISOLATOR (U3)               │   │                 │   │  │
-│   │   │         ADUM1201 / ISO7721                  │   │                 │   │  │
-│   │   │                                             │   │                 │   │  │
-│   │   │   VDD1 ◄── 3.3V      VDD2 ──▶ ISO_5V       │   │                 │   │  │
-│   │   │   GND1 ◄── GND       GND2 ──▶ ISO_GND      │   │                 │   │  │
-│   │   │                                             │   │                 │   │  │
-│   │   │   VIA ◄────────────────────────────────────┘   │  (TX to RS485)  │   │  │
-│   │   │   VOA ─────────────────────────────────────────┼──▶              │   │  │
-│   │   │                                                │                 │   │  │
-│   │   │   VIB ◄────────────────────────────────────────┼───── (RX from   │   │  │
-│   │   │   VOB ─────────────────────────────────────────┘       RS485)    │   │  │
-│   │   │                                                                   │   │  │
-│   │   └───────────────────────────────────────────────────────────────────┘   │  │
-│   │                                                                             │  │
-│   └─────────────────────────────────────────────────────────────────────────────┘  │
-│                                                                                     │
-│   ════════════════════════ ISOLATION BARRIER (2500V) ════════════════════════════  │
-│                                                                                     │
-│   ┌─────────────────────────────────────────────────────────────────────────────┐  │
-│   │                         ISOLATED SIDE                                       │  │
-│   │                                                                             │  │
-│   │   ┌───────────────────┐                                                     │  │
-│   │   │  ISOLATED DC-DC   │                                                     │  │
-│   │   │  B0505S-1WR2      │                                                     │  │
-│   │   │                   │                                                     │  │
-│   │   │  VIN+ ◄── 5V      │      ┌──────────────────────────┐                  │  │
-│   │   │  VIN- ◄── GND     │      │   RS485 TRANSCEIVER      │                  │  │
-│   │   │                   │      │   MAX485 / SP485EE (U4)  │                  │  │
-│   │   │  VOUT+ ──▶ ISO_5V │─────▶│                          │                  │  │
-│   │   │  VOUT- ──▶ ISO_GND│─────▶│   VCC ◄── ISO_5V         │                  │  │
-│   │   │                   │      │   GND ◄── ISO_GND        │                  │  │
-│   │   └───────────────────┘      │                          │                  │  │
-│   │                              │   DI  ◄── From Isolator  │                  │  │
-│   │                              │   RO  ──▶ To Isolator    │                  │  │
-│   │                              │   DE  ◄── Direction Ctrl │                  │  │
-│   │                              │   RE  ◄── Direction Ctrl │                  │  │
-│   │                              │                          │                  │  │
-│   │                              │   A ──┬──[TVS]──┬──▶ Terminal              │  │
-│   │                              │   B ──┼──[TVS]──┼──▶ Terminal              │  │
-│   │                              │       │         │                          │  │
-│   │                              └───────┼─────────┼──────────────────────────┘  │
-│   │                                      │         │                             │  │
-│   │                              ┌───────┴─────────┴───────┐                    │  │
-│   │                              │   PROTECTION CIRCUIT    │                    │  │
-│   │                              │   • TVS Diodes          │                    │  │
-│   │                              │   • GDT (Gas Tube)      │                    │  │
-│   │                              │   • ESD Protection      │                    │  │
-│   │                              └─────────────────────────┘                    │  │
-│   │                                                                             │  │
-│   └─────────────────────────────────────────────────────────────────────────────┘  │
-│                                                                                     │
-│                              ┌─────────────────┐                                   │
-│                              │  RS485 TERMINAL │                                   │
-│                              │   A  B  GND     │                                   │
-│                              └─────────────────┘                                   │
-│                                                                                     │
-└─────────────────────────────────────────────────────────────────────────────────────┘
+## Connections
+1. **ESP32 GPIO Pins** connected to RS485 module.
+2. Power connections to ensure proper operation.
+
+## Notes
+- Ensure all connections are secure before powering on the device.
+- Follow proper grounding techniques to avoid noise interference.
