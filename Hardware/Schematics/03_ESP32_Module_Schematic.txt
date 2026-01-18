@@ -1,10 +1,52 @@
-ESP32-WROOM-32U Module Schematic:
-- 38 Pins
-- Antenna Connector
-- Decoupling Capacitors
-- Reset Button
-- Boot Button
+ESP32-WROOM-32U MODULE SCHEMATIC
+ESP32 RS485 Isolated Design - Section 2
 
-GPIO Assignments for RS485 Communication:
-- IO16: RX (Receive)
-- IO17: TX (Transmit)
+U2: ESP32-WROOM-32U (38-Pin Module with U.FL Antenna Connector)
+
+PIN ASSIGNMENTS:
+Pin 1 ANT - External Antenna via U.FL
+Pin 2 3V3 - Power Input +3.3V with decoupling C6-C9
+Pin 3 EN - Enable with 10k pull-up R2, Reset button SW1
+Pin 26 IO0 - Boot Mode with 10k pull-up R4, Boot button SW2
+Pin 28 IO16 - RS485 RX from Isolator U3
+Pin 29 IO17 - RS485 TX to Isolator U3
+Pin 27 IO4 - RS485 DE/RE Direction Control
+Pin 25 IO2 - Status LED via 330 ohm R3
+Pin 34 RX0 - Programming UART RX
+Pin 35 TX0 - Programming UART TX
+Pin 15, 20, 38 GND - Ground
+
+BOOT MODE CIRCUIT:
++3.3V--[R4 10k]--+---> IO0
+                 |
+              [SW2 Boot]
+                 |
+                GND
+
+ENABLE/RESET CIRCUIT:
++3.3V--[R2 10k]--+---> EN
+                 |
+              [SW1 Reset]
+                 |
+                GND
+
+DECOUPLING CAPACITORS (close to Pin 2):
++3.3V--[C6 0.1uF]--[C7 0.1uF]--[C8 0.1uF]--[C9 10uF]--GND
+
+STATUS LED:
+IO2--[R3 330 ohm]--|>|--GND (LED2 Blue/Green)
+LED Current: (3.3V - 2V) / 330 = 3.9mA
+
+U.FL ANTENNA:
+ESP32 Pin 1 (ANT)--[50 ohm Trace]--U.FL Connector--External 2.4GHz Antenna
+Trace width: 2.9-3.1mm for 50 ohm on 1.6mm FR4
+
+KEY GPIO TABLE:
+IO0 - Boot Mode (pull-up, button to GND)
+IO2 - Status LED
+IO4 - RS485 DE/RE Direction (optional)
+IO16 - RS485 RX (UART2 RX)
+IO17 - RS485 TX (UART2 TX)
+TX0 - Programming UART TX
+RX0 - Programming UART RX
+EN - Enable/Reset (pull-up, button to GND)
