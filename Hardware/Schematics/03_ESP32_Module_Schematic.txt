@@ -1,0 +1,10 @@
+ESP32-WROOM-32U Module Schematic:
+- 38 Pins
+- Antenna Connector
+- Decoupling Capacitors
+- Reset Button
+- Boot Button
+
+GPIO Assignments for RS485 Communication:
+- IO16: RX (Receive)
+- IO17: TX (Transmit)
